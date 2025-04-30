@@ -1,0 +1,24 @@
+// BoxRow.scss
+
+$primary-color: #4caf50;
+$hover-color: #45a049;
+$box-size: 100px;
+
+// .row-container {
+//   transition: transform 0.5s ease;
+// }
+
+
+.button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $hover-color;
+  }
+}

@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* This will center the entire content of the page */
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  /* Horizontally center */
+  align-items: flex-start;
+  /* Vertically center */
+  height: 100vh;
+  /* Make the container take full viewport height */
+  background-color: #f0f0f0;
+  /* Optional: Add a light background for better visibility */
+}
+
+/* Styling for the button to add some space and better appearance */
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}

@@ -1,0 +1,33 @@
+// BoxRow.scss
+
+$primary-color: #4caf50;
+$hover-color: #45a049;
+$box-size: 100px;
+
+// .row {
+//   animation: fadeIn 0.5s forwards;
+// }
+
+// @keyframes fadeIn {
+//   0% {
+//     opacity: 0;
+//   }
+
+//   100% {
+//     opacity: 1;
+//   }
+// }
+
+
+.box {
+  display: inline-block;
+  width: $box-size;
+  height: $box-size;
+  margin: 5px;
+  text-align: center;
+  line-height: $box-size;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
