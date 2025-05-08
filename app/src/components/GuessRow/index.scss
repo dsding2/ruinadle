@@ -4,19 +4,19 @@ $primary-color: #4caf50;
 $hover-color: #45a049;
 $box-size: 100px;
 
-// .row {
-//   animation: fadeIn 0.5s forwards;
-// }
+.row {
+  animation: fadeIn 0.5s forwards;
+}
 
-// @keyframes fadeIn {
-//   0% {
-//     opacity: 0;
-//   }
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
 
-//   100% {
-//     opacity: 1;
-//   }
-// }
+  100% {
+    opacity: 1;
+  }
+}
 
 
 .box {
