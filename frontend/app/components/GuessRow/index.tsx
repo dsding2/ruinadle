@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import './index.scss';
-import { Correctness } from '~/src/entities/GuessData';
+import { Correctness } from '~/entities/GuessData';
 
 type BoxProps = {
   text: string;

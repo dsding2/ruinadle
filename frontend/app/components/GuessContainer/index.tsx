@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './index.scss';
-import { Correctness } from '~/src/entities/GuessData';
+import { Correctness } from '~/entities/GuessData';
 import GuessRow from '../GuessRow';
 import { Flipped, Flipper } from 'react-flip-toolkit';
 
