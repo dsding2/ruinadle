@@ -5,6 +5,21 @@ import sqlite3
 app = Flask(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+@app.route("/api/cards")
+def getAllCards():
+    conn = sqlite3.connect(os.path.join(BASE_DIR, "data/data.db"))
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+
+    sql = """
+    SELECT m.*
+    FROM card_data m
+    """
+    cur.execute(sql)
+    results = [dict(row) for row in cur.fetchall()]
+    conn.close()
+
+    return jsonify(results)
 
 @app.route("/search")
 def search():

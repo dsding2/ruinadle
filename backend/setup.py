@@ -6,7 +6,8 @@ import os
 # Load CSV
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-df = pd.read_csv(os.path.join(BASE_DIR, "data/parsed.txt"))
+df = pd.read_csv(os.path.join(BASE_DIR, "data/parsed.txt")).fillna("")
+print(df)
 
 # Create DB and FTS5 table
 conn = sqlite3.connect(os.path.join(BASE_DIR, "data/data.db"))

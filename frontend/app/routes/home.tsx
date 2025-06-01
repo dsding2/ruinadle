@@ -1,5 +1,7 @@
 import Ruinadle from "~/main";
 import type { Route } from "./+types/home";
+import { Provider } from "react-redux";
+import { store } from "~/redux/store";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -9,5 +11,5 @@ export function meta({ }: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <Ruinadle></Ruinadle>;
+  return <Provider store={store}><Ruinadle></Ruinadle></Provider>;
 }
