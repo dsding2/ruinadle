@@ -6,7 +6,11 @@ import type { Card } from '~/entities/GuessData';
 import { getIconPath } from '~/utils';
 import './index.scss'
 
-export const SearchBar: React.FC = () => {
+type SearchBarProps = {
+  onSubmit: (card: Card) => void;
+};
+
+export const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
   const [query, setQuery] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const allCards = useSelector((state: RootState) => state.cards.allCards);
@@ -28,46 +32,57 @@ export const SearchBar: React.FC = () => {
       return aLower.localeCompare(bLower);
     });
 
+  const trySubmit = (submit_name: string) => {
+    const cards = allCards.filter((card: Card) => (card.name.toLowerCase() == submit_name.toLowerCase()))
+    if (cards.length != 1 || submit_name === "") {
+      return
+    }
+    onSubmit(cards[0]);
+  }
+
   return (
-    <div className="search-container">
-      <input
-        type="text"
-        value={query}
-        onMouseDown={() => setShowDropdown(true)}
-        onChange={(e) => {
-          setQuery(e.target.value);
-          setShowDropdown(true);
-        }}
-        onBlur={() => setTimeout(() => setShowDropdown(false), 100)}
-        className="search-input"
-        placeholder="Search..."
-      />
-      {showDropdown && query && (
-        <ul className="search-dropdown">
-          {filteredCards.length > 0 ? (
-            filteredCards.map((item, idx) => (
-              <li
-                key={idx}
-                className="search-item"
-                onMouseDown={() => {
-                  setQuery(item.name);
-                  setShowDropdown(false);
-                }}
-              >
-                <img
-                  src={getIconPath(item.artwork)}
-                  alt={item.name + " icon"}
-                  className="search-icon"
-                  loading="lazy"
-                />
-                {item.name}
-              </li>
-            ))
-          ) : (
-            <li className="search-item no-match">No matches found</li>
-          )}
-        </ul>
-      )}
+    <div className="search-wrapper">
+      <div className="search-container">
+        <input
+          type="text"
+          value={query}
+          onMouseDown={() => setShowDropdown(true)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setShowDropdown(true);
+          }}
+          onBlur={() => setTimeout(() => setShowDropdown(false), 100)}
+          className="search-input"
+          placeholder="Search..."
+        />
+        {showDropdown && query && (
+          <ul className="search-dropdown">
+            {filteredCards.length > 0 ? (
+              filteredCards.map((item, idx) => (
+                <li
+                  key={idx}
+                  className="search-item"
+                  onMouseDown={() => {
+                    setQuery(item.name);
+                    setShowDropdown(false);
+                  }}
+                >
+                  <img
+                    src={getIconPath(item.artwork)}
+                    alt={item.name + " icon"}
+                    className="search-icon"
+                    loading="lazy"
+                  />
+                  {item.name}
+                </li>
+              ))
+            ) : (
+              <li className="search-item no-match">No matches found</li>
+            )}
+          </ul>
+        )}
+      </div>
+      <button onClick={() => { trySubmit(query) }} className='search-button'>Submit</button>
     </div>
   );
 };
