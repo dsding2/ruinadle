@@ -1,10 +1,9 @@
-// components/CardSearch.tsx
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '~/redux/store';
 import type { Card } from '~/entities/GuessData';
-import { getIconPath } from '~/utils';
 import './index.scss'
+import { SearchDropdown } from './SearchDropdown';
 
 type SearchBarProps = {
   onSubmit: (card: Card) => void;
@@ -15,29 +14,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const allCards = useSelector((state: RootState) => state.cards.allCards);
 
-  const filteredCards = allCards
-    .filter((card: Card) =>
-      card.name.toLowerCase().includes(query.toLowerCase())
-    )
-    .sort((a, b) => {
-      const aLower = a.name.toLowerCase();
-      const bLower = b.name.toLowerCase();
-
-      const aStarts = aLower.startsWith(query);
-      const bStarts = bLower.startsWith(query);
-
-      if (aStarts && !bStarts) return -1;
-      if (!aStarts && bStarts) return 1;
-
-      return aLower.localeCompare(bLower);
-    });
-
-  const trySubmit = (submit_name: string) => {
-    const cards = allCards.filter((card: Card) => (card.name.toLowerCase() == submit_name.toLowerCase()))
-    if (cards.length != 1 || submit_name === "") {
+  const trySubmit = (submitName: string) => {
+    const cards = allCards.filter((card: Card) => (card.name.toLowerCase() == submitName.toLowerCase()))
+    if (cards.length != 1 || submitName === "") {
       return
     }
     onSubmit(cards[0]);
+  }
+  const onDropdownSelect = (name: string) => {
+    setShowDropdown(false);
+    setQuery(name);
   }
 
   return (
@@ -56,30 +42,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
           placeholder="Search..."
         />
         {showDropdown && query && (
-          <ul className="search-dropdown">
-            {filteredCards.length > 0 ? (
-              filteredCards.map((item, idx) => (
-                <li
-                  key={idx}
-                  className="search-item"
-                  onMouseDown={() => {
-                    setQuery(item.name);
-                    setShowDropdown(false);
-                  }}
-                >
-                  <img
-                    src={getIconPath(item.artwork)}
-                    alt={item.name + " icon"}
-                    className="search-icon"
-                    loading="lazy"
-                  />
-                  {item.name}
-                </li>
-              ))
-            ) : (
-              <li className="search-item no-match">No matches found</li>
-            )}
-          </ul>
+          <SearchDropdown query={query} onDropdownSelect={onDropdownSelect}></SearchDropdown>
         )}
       </div>
       <button onClick={() => { trySubmit(query) }} className='search-button'>Submit</button>

@@ -23,9 +23,6 @@ export default function Ruinadle() {
     // Add any side effect here (API call, state update, etc.)
   }, []);
 
-  if (status === 'loading') return <div>Loading dataset...</div>;
-  if (status === 'failed') return <div>Failed to load dataset.</div>;
-  if (!data) return null;
   return (
     <div>
       <SearchBar onSubmit={handleSubmit}></SearchBar>
