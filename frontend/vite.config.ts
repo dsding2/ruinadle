@@ -11,6 +11,11 @@ export default defineConfig({
         target: 'http://localhost:5000', // Flask backend
         changeOrigin: true,
         secure: false,
+      },
+      '/images': {
+        target: 'http://localhost:5000', // Flask backend
+        changeOrigin: true,
+        secure: false,
       }
     }
   }

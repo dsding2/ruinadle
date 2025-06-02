@@ -3,32 +3,71 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '~/redux/store';
 import type { Card } from '~/entities/GuessData';
+import { getIconPath } from '~/utils';
+import './index.scss'
 
 export const SearchBar: React.FC = () => {
   const [query, setQuery] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
   const allCards = useSelector((state: RootState) => state.cards.allCards);
 
-  const filteredCards = allCards.filter((card: Card) =>
-    card.name.toLowerCase().includes(query.toLowerCase())
-  );
+  const filteredCards = allCards
+    .filter((card: Card) =>
+      card.name.toLowerCase().includes(query.toLowerCase())
+    )
+    .sort((a, b) => {
+      const aLower = a.name.toLowerCase();
+      const bLower = b.name.toLowerCase();
 
-  
+      const aStarts = aLower.startsWith(query);
+      const bStarts = bLower.startsWith(query);
+
+      if (aStarts && !bStarts) return -1;
+      if (!aStarts && bStarts) return 1;
+
+      return aLower.localeCompare(bLower);
+    });
+
   return (
-    <div className="p-4">
+    <div className="search-container">
       <input
         type="text"
-        placeholder="Search cards..."
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="border px-3 py-2 rounded w-full mb-4"
+        onMouseDown={() => setShowDropdown(true)}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setShowDropdown(true);
+        }}
+        onBlur={() => setTimeout(() => setShowDropdown(false), 100)}
+        className="search-input"
+        placeholder="Search..."
       />
-      <ul>
-        {filteredCards.map((card) => (
-          <li key={card.id} className="mb-2">
-            <strong>{card.name}</strong> — {card.keywords}
-          </li>
-        ))}
-      </ul>
+      {showDropdown && query && (
+        <ul className="search-dropdown">
+          {filteredCards.length > 0 ? (
+            filteredCards.map((item, idx) => (
+              <li
+                key={idx}
+                className="search-item"
+                onMouseDown={() => {
+                  setQuery(item.name);
+                  setShowDropdown(false);
+                }}
+              >
+                <img
+                  src={getIconPath(item.artwork)}
+                  alt={item.name + " icon"}
+                  className="search-icon"
+                  loading="lazy"
+                />
+                {item.name}
+              </li>
+            ))
+          ) : (
+            <li className="search-item no-match">No matches found</li>
+          )}
+        </ul>
+      )}
     </div>
   );
 };
