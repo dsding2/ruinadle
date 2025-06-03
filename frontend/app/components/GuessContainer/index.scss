@@ -1,24 +1,33 @@
-// BoxRow.scss
+.grid-table {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: sans-serif;
 
-$primary-color: #4caf50;
-$hover-color: #45a049;
-$box-size: 100px;
+  .header-row,
+  .data-row {
+    display: flex;
+  }
 
-// .row-container {
-//   transition: transform 0.5s ease;
-// }
+  .cell {
+    padding: 4px;
+    box-sizing: border-box;
+    width: 5rem;
+    justify-content: center;
+    text-align: center;
+  }
 
+  .header {
+    font-weight: bold;
+  }
 
-.button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: $primary-color;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  input {
+    width: 100%;
+    padding: 4px;
+    box-sizing: border-box;
+  }
 
-  &:hover {
-    background-color: $hover-color;
+  .add-btn {
+    margin-top: 10px;
   }
 }

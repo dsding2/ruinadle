@@ -105,3 +105,49 @@ export function asCard(obj: unknown): Card {
 
   throw new Error('Invalid card JSON structure');
 }
+const comparisonKeys = ["Artwork", "Name", "Chapter", "Rarity", "Cost", "Attack Type", "Die Types", "Max Roll", "Min Roll", "Number of Die", "Keywords"]
+
+export type CardFeatures = {
+  artwork: string,
+  name: string,
+  chapter: string,
+  rarity: string,
+  cost: number,
+  attackType: string,
+  dieTypes: Set<string>,
+  maxRoll: number,
+  minRoll: number,
+  numDie: number,
+  keywords: string[]
+}
+
+const attackTypeMap: Record<string, string> = {
+  "Near": "Melee",
+  "Far": "Ranged",
+  "FarArea": "Mass-Summation",
+  "FarAreaEach": "Mass-Individual",
+  "": "On Play"
+}
+
+const chapterMap: Record<number, string> = {
+  1: "Canard",
+  2: "Urban Myth",
+  3: "Urban Legend",
+  4: "Urban Plague",
+  5: "Urban Nightmare",
+  6: "Star of the City",
+  7: "Impuritas Civitatis"
+}
+
+export function extractFeatures(card: Card): CardFeatures {
+  const features: CardFeatures = {
+    ...card,
+    chapter: chapterMap[card.chapter] ?? "Unspecified",
+    attackType: attackTypeMap[card.range] ?? "Unknown Range",
+    dieTypes: new Set(card.dice.map((die: Die) => (die.Detail))),
+    maxRoll: Math.max(...card.dice.map(item => item.Dice)),
+    minRoll: Math.min(...card.dice.map(item => item.Min)),
+    numDie: card.dice.length,
+  }
+  return features
+}
