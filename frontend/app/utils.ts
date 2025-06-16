@@ -3,9 +3,13 @@ import seedrandom from 'seedrandom';
 
 
 export function getIconPath(artwork: string): string {
-  // Remove existing extension if any
   const base_name = artwork.replace(/\.[^/.]+$/, "");
   return `images/icons/${base_name}.webp`;
+}
+
+export function getImagePath(artwork: string): string {
+  const base_name = artwork.replace(/\.[^/.]+$/, "");
+  return `images/${base_name}.webp`;
 }
 
 export function getRandomCard(allCards: Card[], seed: string | null) {

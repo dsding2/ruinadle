@@ -1,8 +1,11 @@
 export enum Correctness {
+  None = 'none',
   Correct = 'correct',
   Partial = 'partial',
+  TooHigh = 'tooHigh',
+  TooLow = 'tooLow',
   Incorrect = 'incorrect'
-}
+};
 
 export type Die = {
   Min: number;
@@ -57,7 +60,7 @@ export function asDice(jsonStr: string): Die[] {
   }
 
   return result;
-}
+};
 
 
 export type Card = {
@@ -88,7 +91,6 @@ export function asCard(obj: unknown): Card {
     typeof (obj as any).rarity === 'string' &&
     typeof (obj as any).cost === 'number'
   ) {
-
     return {
       id: (obj as any).id,
       name: (obj as any).name,
@@ -104,13 +106,12 @@ export function asCard(obj: unknown): Card {
   }
 
   throw new Error('Invalid card JSON structure');
-}
-const comparisonKeys = ["Artwork", "Name", "Chapter", "Rarity", "Cost", "Attack Type", "Die Types", "Max Roll", "Min Roll", "Number of Die", "Keywords"]
+};
 
 export type CardFeatures = {
   artwork: string,
   name: string,
-  chapter: string,
+  chapter: number,
   rarity: string,
   cost: number,
   attackType: string,
@@ -118,7 +119,21 @@ export type CardFeatures = {
   maxRoll: number,
   minRoll: number,
   numDie: number,
-  keywords: string[]
+  keywords: Set<string>
+};
+
+export const cardFeatureOrder: (keyof CardFeatures)[] = ["name", "chapter", "rarity", "cost", "attackType", "dieTypes", "maxRoll", "minRoll", "numDie", "keywords"];
+export const locCardFeature = {
+  "artwork": "Artwork",
+  "name": "Name",
+  "chapter": "Chapter",
+  "rarity": "cost",
+  "attackType": "Attack Type",
+  "dieTypes": "Die Types",
+  "maxRoll": "Max Roll",
+  "minRoll": "Min Roll",
+  "numDie": "Num Die",
+  "keywords": "Keywords"
 }
 
 const attackTypeMap: Record<string, string> = {
@@ -127,7 +142,7 @@ const attackTypeMap: Record<string, string> = {
   "FarArea": "Mass-Summation",
   "FarAreaEach": "Mass-Individual",
   "": "On Play"
-}
+};
 
 const chapterMap: Record<number, string> = {
   1: "Canard",
@@ -137,17 +152,29 @@ const chapterMap: Record<number, string> = {
   5: "Urban Nightmare",
   6: "Star of the City",
   7: "Impuritas Civitatis"
-}
+};
 
+export const blankCard: Card = {
+  id: -1,
+  name: "PLACEHOLDER",
+  artwork: "none",
+  description: "PLACEHOLDER DESC",
+  keywords: [],
+  chapter: -1,
+  dice: [],
+  range: "PLACEHOLDER",
+  rarity: "NONE",
+  cost: -1
+}
 export function extractFeatures(card: Card): CardFeatures {
   const features: CardFeatures = {
     ...card,
-    chapter: chapterMap[card.chapter] ?? "Unspecified",
+    keywords: new Set(card.keywords),
     attackType: attackTypeMap[card.range] ?? "Unknown Range",
     dieTypes: new Set(card.dice.map((die: Die) => (die.Detail))),
     maxRoll: Math.max(...card.dice.map(item => item.Dice)),
     minRoll: Math.min(...card.dice.map(item => item.Min)),
     numDie: card.dice.length,
-  }
-  return features
-}
+  };
+  return features;
+};

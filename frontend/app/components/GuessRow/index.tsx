@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import './index.scss';
 import { Correctness } from '~/entities/GuessData';
+import { getIconPath, getImagePath } from '~/utils';
 
 type BoxProps = {
   text: string;
@@ -32,15 +33,17 @@ const Box: React.FC<BoxProps> = ({ text, correctness }) => {
 };
 
 interface GuessRowProps {
-  guess_data: string[];
-  correctness_data: Correctness[];
+  artworkPath: string
+  guess: string[];
+  correctness: Correctness[];
 }
 
-const GuessRow: React.FC<GuessRowProps> = ({ guess_data, correctness_data }) => {
+const GuessRow: React.FC<GuessRowProps> = ({ artworkPath, guess, correctness }) => {
   return (
     <div className='row'>
-      {guess_data.map((val, idx) => (
-        <Box key={val} text={val} correctness={correctness_data[idx]} />
+      <img src={getIconPath(artworkPath)} alt="Description" />
+      {guess.map((val, idx) => (
+        <Box key={val} text={val} correctness={correctness[idx]} />
       ))}
     </div>
   );

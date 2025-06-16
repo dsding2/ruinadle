@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './index.scss';
-import { Correctness, type Card } from '~/entities/GuessData';
+import { Correctness, type Card, cardFeatureOrder, extractFeatures, blankCard } from '~/entities/GuessData';
 import GuessRow from '../GuessRow';
 import { Flipped, Flipper } from 'react-flip-toolkit';
+import { compareCard, comparisonKeys } from './utils';
+
 
 type GuessContainerProps = {
   guesses: Card[],
@@ -10,14 +12,18 @@ type GuessContainerProps = {
 }
 
 const GuessContainer: React.FC<GuessContainerProps> = ({ guesses, correctCard }) => {
-  const [components, setComponents] = useState<React.ReactNode[]>([]);
+  // const [components, setComponents] = useState<React.ReactNode[]>([]);
+  const correctFeatures = extractFeatures(correctCard ?? blankCard);
 
-  const comparisonKeys = ["Artwork", "Name", "Chapter", "Rarity", "Cost", "Attack Type", "Die Type", "Max Roll", "Min Roll", "Number of Die", "Keywords"]
-
-  const addComponent = (guess_data: string[], correctness_data: Correctness[]) => {
-    const newComponent = <GuessRow guess_data={guess_data} correctness_data={correctness_data} />
-    setComponents(prev => [newComponent, ...prev]);
-  };
+  const makeComponent = (guess: Card) => {
+    if (correctCard === null) {
+      return null;
+    }
+    const guessedFeatures = extractFeatures(guess);
+    const data = cardFeatureOrder.map((cf) => (guessedFeatures[cf].toString()));
+    const correctnessData = compareCard(correctFeatures, guessedFeatures);
+    return <GuessRow artworkPath={guessedFeatures.artwork} guess={data} correctness={correctnessData} />
+  }
 
   return (
     <div className="grid-table">
@@ -27,9 +33,9 @@ const GuessContainer: React.FC<GuessContainerProps> = ({ guesses, correctCard })
         ))}
       </div>
       <div className='row-container'>
-        <Flipper flipKey={components.length}>
-          {components.map((component, idx) => (
-            <Flipped key={components.length - idx} flipId={components.length - idx}><div>{component}</div></Flipped>
+        <Flipper flipKey={guesses.length}>
+          {guesses.map((guess, idx) => (
+            <Flipped key={guesses.length - idx} flipId={guesses.length - idx}><div>{makeComponent(guess)}</div></Flipped>
           ))}
           {/* {compCount.map((component, idx) => (
             <Flipped key={compCount[idx]} flipId={compCount[idx]}><h1>{component}</h1></Flipped>

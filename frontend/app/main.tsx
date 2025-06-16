@@ -31,9 +31,8 @@ export default function Ruinadle() {
   }, [status, dispatch]);
 
   const handleSubmit = useCallback((guess: Card) => {
-    // Effect logic in the parent
-    console.log('Button in child triggered an effect in parent!');
-    // Add any side effect here (API call, state update, etc.)
+    setGuesses([guess, ...guesses])
+    // console.log(guess)
   }, []);
 
   return (
