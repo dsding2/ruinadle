@@ -18,7 +18,7 @@ export const SearchDropdown: React.FC<SearchDropdownProps> = ({ query, onDropdow
 
   const filteredCards = allCards
     .filter((card: Card) =>
-      card.name.toLowerCase().includes(query.toLowerCase())
+      card.name.toLowerCase().includes(query.toLowerCase()) || card.artwork.toLowerCase().includes(query.toLowerCase())
     )
     .sort((a, b) => {
       const aLower = a.name.toLowerCase();

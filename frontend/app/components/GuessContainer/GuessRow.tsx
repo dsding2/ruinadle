@@ -1,4 +1,3 @@
-import React, { useState, useRef } from 'react';
 import './index.scss';
 import { Correctness } from '~/entities/GuessData';
 import { getIconPath, getImagePath } from '~/utils';
@@ -13,20 +12,19 @@ const Box: React.FC<BoxProps> = ({ text, correctness }) => {
     switch (correctness) {
       case Correctness.Correct:
         return '#4caf50'; // green
-      case Correctness.Partial:
-        return '#ff9800'; // orange
       case Correctness.Incorrect:
         return '#f44336'; // red
       default:
-        return '#9e9e9e'; // gray fallback
+        return '#ff9800'; // orange
     }
   }
-
+  const hasArrow = correctness === Correctness.TooHigh || correctness === Correctness.TooLow;
   return (
     <div
-      className="box"
+      className={hasArrow ? "arrow-box cell" : "cell"}
       style={{ backgroundColor: getColor(correctness) }}
     >
+      {hasArrow ? <span>{correctness === Correctness.TooLow ? '⬆️' : '⬇️'}</span> : null}
       {text}
     </div>
   );
@@ -41,9 +39,9 @@ interface GuessRowProps {
 const GuessRow: React.FC<GuessRowProps> = ({ artworkPath, guess, correctness }) => {
   return (
     <div className='row'>
-      <img src={getIconPath(artworkPath)} alt="Description" />
+      <div className='cell'><img src={getIconPath(artworkPath)} alt="Description" /></div>
       {guess.map((val, idx) => (
-        <Box key={val} text={val} correctness={correctness[idx]} />
+        <Box key={idx} text={val} correctness={correctness[idx + 2]} />
       ))}
     </div>
   );

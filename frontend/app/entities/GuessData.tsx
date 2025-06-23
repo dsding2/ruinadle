@@ -144,15 +144,23 @@ const attackTypeMap: Record<string, string> = {
   "": "On Play"
 };
 
-const chapterMap: Record<number, string> = {
-  1: "Canard",
-  2: "Urban Myth",
-  3: "Urban Legend",
-  4: "Urban Plague",
-  5: "Urban Nightmare",
-  6: "Star of the City",
-  7: "Impuritas Civitatis"
+export const chapterMap: Record<number, string> = {
+  1: "1: Canard",
+  2: "2: Urban Myth",
+  3: "3: Urban Legend",
+  4: "4: Urban Plague",
+  5: "5: Urban Nightmare",
+  6: "6: Star of the City",
+  7: "7: Impuritas Civitatis"
 };
+
+export const dieTypeMap: Record<string, string> = {
+  "Hit": "Blunt",
+  "Penetrate": "Pierce",
+  "Slash": "Slash",
+  "Evasion": "Evade",
+  "Guard": "Block"
+}
 
 export const blankCard: Card = {
   id: -1,
@@ -171,7 +179,7 @@ export function extractFeatures(card: Card): CardFeatures {
     ...card,
     keywords: new Set(card.keywords),
     attackType: attackTypeMap[card.range] ?? "Unknown Range",
-    dieTypes: new Set(card.dice.map((die: Die) => (die.Detail))),
+    dieTypes: new Set(card.dice.map((die: Die) => (dieTypeMap[die.Detail] ?? "Unknown Die Type"))),
     maxRoll: Math.max(...card.dice.map(item => item.Dice)),
     minRoll: Math.min(...card.dice.map(item => item.Min)),
     numDie: card.dice.length,

@@ -12,7 +12,6 @@ import type { RootState } from '~/redux/store';
 export default function Ruinadle() {
   const allCards = useSelector((state: RootState) => state.cards.allCards);
   const dispatch = useAppDispatch();
-  const data = useAppSelector(selectCards);
   const status = useAppSelector(selectCardStatus);
   const [guesses, setGuesses] = useState<Card[]>([])
   const [correctCard, setCorrectCard] = useState<Card | null>(null)
@@ -31,8 +30,7 @@ export default function Ruinadle() {
   }, [status, dispatch]);
 
   const handleSubmit = useCallback((guess: Card) => {
-    setGuesses([guess, ...guesses])
-    // console.log(guess)
+    setGuesses(prevGuesses => [guess, ...prevGuesses])
   }, []);
 
   return (

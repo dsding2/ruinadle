@@ -4,7 +4,7 @@ import { Correctness, type Card, type CardFeatures } from "~/entities/GuessData"
 export const comparisonKeys = ["Artwork", "Name", "Chapter", "Rarity", "Cost", "Attack Type", "Die Type", "Max Roll", "Min Roll", "Number of Die", "Keywords"]
 
 const compareExact = (c: string, g: string) => (c === g ? Correctness.Correct : Correctness.Incorrect);
-const compareNumber = (c: number, g: number) => (c < g ? Correctness.TooHigh : c > g ? Correctness.TooLow : Correctness.Correct)
+const compareNumber = (c: number, g: number) => (c < g ? Correctness.TooHigh : (c > g ? Correctness.TooLow : Correctness.Correct))
 const compareSet = (c: Set<string>, g: Set<string>) => {
   if (c.size !== g.size) {
     for (const elem of c) {
